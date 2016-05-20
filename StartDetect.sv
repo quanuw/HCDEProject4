@@ -11,7 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-module StartDetect(output [3:0] pOut,
+module StartDetect(output enable,
                    input sIn,
                    input clk,
                    input rst);

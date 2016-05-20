@@ -18,19 +18,25 @@ module BSD(output dataOut,
 
     reg [3:0] count;
     reg startFlag;
+    reg id;
+    reg data;
 
     always @(posedge clk) begin
-        if (enable == 4'b0000)
+        if (enable == 4'b0000) begin
             startFlag <= 1'b1;
-            if (startFlag or count < 4'b1111) begin
-                dataOut <= dataIn;
+            if (startFlag && (count < 4'b1111)) begin
+                startFlag <= 1'b1;
                 count <= count + 1;
+                data <= dataIn;
             end else begin
-                idEnable <= 1'b1;
+                id <= 1'b1;
                 count <= 4'b0000;
-                enable <= 4'b1111;
                 startFlag <= 1'b0;
             end
         end
     end
+
+    assign idEnable = id;
+    assign dataOut = data;
+
 endmodule
