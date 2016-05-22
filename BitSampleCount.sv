@@ -22,7 +22,7 @@ module BitSampleCounter(output dataOut,
     reg data;
 
     always @(posedge clk) begin
-        if (enable == 4'b0000) begin
+        if (enable == 4'b0000 && ~startFlag) begin
             startFlag <= 1'b1;
         end else if (startFlag && (count < 4'b1111)) begin
             startFlag <= 1'b1;
@@ -51,10 +51,6 @@ module BitSampleCounter_tb();
     wire dataOut;
     wire idEnable;
 
-
-
-
-
     BitSampleCounter bsc(dataOut,
                          idEnable,
                          dataIn,
@@ -75,11 +71,9 @@ module BitSampleCounter_tb();
        clk = ~clk;
     end
 
-
-
-   // Set up the inputs to the design. Each line is a clock cycle.
+    // Set up the inputs to the design. Each line is a clock cycle.
     initial begin
-    enable <= 0; dataIn <= 0; @(posedge clk);
+    enable <= 4'b0000; dataIn <= 0; @(posedge clk);
 
     enable <= 1; dataIn <= 0; @(posedge clk);
 
