@@ -40,7 +40,7 @@ int main() {
 					}
 				}
 				IOWR_ALTERA_AVALON_PIO_DATA(sendAddress, command2 + '0');
-				*leds = *IOWR_ALTERA_AVALON_PIO_DATA(receiveAddress);
+				*leds = *IOWR_ALTERA_AVALON_PIO_DATA(sendAddress);
 		   }
 		} else if (command == 'R') {
 			int count = 0;
