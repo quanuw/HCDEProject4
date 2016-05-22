@@ -3,14 +3,18 @@
 //
 // networkInterface.c
 #include "sys/alt_stdio.h"
+#include "altera_avalon_pio_regs.h"
 #define DATA_SIZE 16
 #define BUFFER_SIZE 4
 #define TIME_OUT 150000
  
 #define leds (volatile char *) 0x3020
-// define send register
-// define receive register
-// define character received register
+// #define sendAddress (volatile char *) 
+// #define receiveAddress (volatile char *) 
+// #define charReceived (volatile char *) 
+
+// IOWR_ALTERA_AVALON_PIO_DATA(targetAddress, aValue); : WRITE
+// aValue = IOWR_ALTERA_AVALON_PIO_DATA(sourceAddress); : READ
 int main() {
 	char command = ' ';
 	while(1){
@@ -35,13 +39,13 @@ int main() {
 						alt_putstr("\nThis is not a valid character. Please enter another character. \n");
 					}
 				}
-				// put dataBuilder(command2) in to appropriate register
-				// assigne LEDs to data
+				IOWR_ALTERA_AVALON_PIO_DATA(sendAddress, command2 + '0');
+				*leds = *IOWR_ALTERA_AVALON_PIO_DATA(receiveAddress);
 		   }
 		} else if (command == 'R') {
 			int count = 0;
 			char command3 = ' ';
-			while (1 /*receive register != bits*/) {
+			while (go) {
 				if (count > TIME_OUT){
 					alt_putstr("Would you like to continue receiving?\n\nPossible Commands:\n1. \'Y\' - Yes\n2. \'N\' - No\n");
 					while (command3 != 'Y' && command3 != 'N') {
@@ -65,29 +69,4 @@ int main() {
 		}
 	}
 	return 0;
-}
-
-int * dataBuilder(unsigned char input) {
-	int i;
-	int temp = input;
-	int out[DATA_SIZE];
-	
-	// Pads data with start bits
-	for (i = 0; i < BUFFER_SIZE; i++) {
-		out[i] = 0;
-	}
-	
-	// Building the binary version of input
-	while (i < DATA_SIZE - BUFFER_SIZE) {
-		out[i] = temp % 2;
-		temp = temp >> 1;
-		i++;
-	}
-	
-	// Pads data with end bits
-	for (i = DATA_SIZE - BUFFER_SIZE; i < DATA_SIZE; i++) {
-		out[i] = 1;
-	}
-	
-	return out;
 }
