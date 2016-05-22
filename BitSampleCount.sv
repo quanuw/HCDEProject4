@@ -13,6 +13,7 @@
 module BitSampleCounter(output dataOut,
                         output idEnable,
                         input dataIn,
+								input rst,
                         input [3:0] enable,
                         input clk);
 
@@ -22,17 +23,22 @@ module BitSampleCounter(output dataOut,
     reg data;
 
     always @(posedge clk) begin
-        if (enable == 4'b0000) begin
+		  if (enable == 4'b0000 && rst) begin
             startFlag <= 1'b1;
-        end else if (startFlag && (count < 4'b1111)) begin
+				id <= 1'b0;
+        end else if (startFlag && (count < 4'b1111) && rst) begin
             startFlag <= 1'b1;
             count <= count + 1;
             data <= dataIn;
-        end else begin
+        end else if (startFlag && rst) begin
             id <= 1'b1;
             count <= 4'b0000;
             startFlag <= 1'b0;
-        end
+        end else begin // active low reset, default state
+				id <= 1'b0;
+            count <= 4'b0000;
+            startFlag <= 1'b0;
+		  end
 
     end
 
@@ -46,6 +52,7 @@ module BitSampleCounter_tb();
     reg [3:0] enable;
     reg dataIn;
     reg clk;
+	 reg rst;
 
     // Outputs
     wire dataOut;
@@ -58,6 +65,7 @@ module BitSampleCounter_tb();
     BitSampleCounter bsc(dataOut,
                          idEnable,
                          dataIn,
+								 rst,
                          enable,
                          clk);
 
