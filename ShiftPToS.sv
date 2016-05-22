@@ -4,7 +4,7 @@
 // References:
 // Description: Shifter that takes in an 8-bit parallel input and has 1-bit
 // parallel output
-// Implmentation: Implemented in behavioral verilog.
+// Implementation: Implemented in behavioral verilog.
 //
 // TODO: make a testbench. Do a sanity check.
 // Change history:
@@ -15,7 +15,8 @@ module ShiftPToS(output sOut,
                  input [7:0] data,
                  input sIn,
                  input load,
-                 input Clock);
+                 input Clock
+					  input rst);
 
     reg [7:0] temp;
 
@@ -23,7 +24,9 @@ module ShiftPToS(output sOut,
     // if there load line has a value then temp is assigned to 8-bit data
     // else top bit of temp is taken off and sIn is appended to temp
     always @(posedge Clock or posedge load) begin
-        if (load)
+		  if (rst) 
+				temp = 8'bz;
+        else if (load)
             temp = data;
         else
             temp = {temp[6:0], sIn};
@@ -36,6 +39,7 @@ endmodule
 module ShiftPToS_tb();
     // Inputs
     reg [7:0] data;
+	 reg rst;
     reg sIn;
     reg load;
     reg Clock;
@@ -47,7 +51,8 @@ module ShiftPToS_tb();
                    data,
                    sIn,
                    load,
-                   Clock);
+                   Clock,
+						 rst);
 
     initial begin
     $dumpfile("ShiftPToS_tb.vcd");
@@ -68,6 +73,7 @@ module ShiftPToS_tb();
 
    // Set up the inputs to the design. Each line is a clock cycle.
     initial begin
+	 rst <= 1; @(posedge Clock); rst <= 0; @(posedge Clock);
     data <= 5; load <= 1; sIn <= 1; @(posedge Clock);
 
 
