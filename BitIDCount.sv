@@ -17,7 +17,7 @@ module BitIDCount (output charReceived,
                    input enable,
                    input clk,
                    input rst);
-    reg [3:0] count;
+    reg [2:0] count;
     reg isReceived;
 
     always @(posedge clk) begin
@@ -25,10 +25,10 @@ module BitIDCount (output charReceived,
             isReceived <= 0;
             count <= 0;
         end else begin
-            if (enable && count < 10) begin
+            if (enable && count < 8) begin
                 isReceived <= 0;
                 count <= count + 1;
-            end else if (~enable && count < 10) begin
+            end else if (~enable && count < 8) begin
                 isReceived <= 0;
                 count <= count;
             end else begin
@@ -51,7 +51,7 @@ module BitIDCount_tb();
     reg clk;
     reg rst;
 
-    BitIDCount uut (charReceived,
+    BitIDCount dut (charReceived,
                     enable,
                     clk,
                     rst);
