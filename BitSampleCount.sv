@@ -25,19 +25,19 @@ module BitSampleCounter(output dataOut,
 
     always @(posedge clk) begin
         if (!rst) begin
-            count <= 4'b000;
+            count <= 3'b000;
             data <= 1'b0;
             id <= 1'b0;
         end else begin
-            if (enable == 4'b0000 && ~startFlag) begin
+            if (enable == 3'b000 && ~startFlag) begin
                 startFlag <= 1'b1;
-            end else if (startFlag && (count < 4'b111)) begin
+            end else if (startFlag && (count < 3'b111)) begin
                 startFlag <= 1'b1;
                 count <= count + 1;
                 data <= dataIn;
             end else begin
                 id <= 1'b1;
-                count <= 4'b000;
+                count <= 3'b000;
                 startFlag <= 1'b0;
             end
         end
