@@ -15,8 +15,8 @@ module ShiftPToS(output sOut,
                  input [7:0] data,
                  input sIn,
                  input load,
-                 input Clock
-					  input rst);
+                 input Clock,
+				 input rst);
 
     reg [7:0] temp;
 
@@ -24,12 +24,12 @@ module ShiftPToS(output sOut,
     // if there load line has a value then temp is assigned to 8-bit data
     // else top bit of temp is taken off and sIn is appended to temp
     always @(posedge Clock or posedge load) begin
-		  if (rst) 
-				temp = 8'bz;
+		if (!rst)
+			temp <= 8'bz;
         else if (load)
-            temp = data;
+            temp <= data;
         else
-            temp = {temp[6:0], sIn};
+            temp <= {temp[6:0], sIn};
     end
     // assign sOut temp
     assign sOut = temp[7];
@@ -39,7 +39,7 @@ endmodule
 module ShiftPToS_tb();
     // Inputs
     reg [7:0] data;
-	 reg rst;
+	reg rst;
     reg sIn;
     reg load;
     reg Clock;
@@ -52,7 +52,7 @@ module ShiftPToS_tb();
                    sIn,
                    load,
                    Clock,
-						 rst);
+				   rst);
 
     initial begin
     $dumpfile("ShiftPToS_tb.vcd");
@@ -73,24 +73,31 @@ module ShiftPToS_tb();
 
    // Set up the inputs to the design. Each line is a clock cycle.
     initial begin
-	 rst <= 1; @(posedge Clock); rst <= 0; @(posedge Clock);
-    data <= 5; load <= 1; sIn <= 1; @(posedge Clock);
+
+    rst <= 0; @(posedge Clock); rst <= 1; @(posedge Clock);
+
+    data <= 8'b10000101; load <= 1; sIn <= 1;   @(posedge Clock);
+                                                @(posedge Clock);
+                                                @(posedge Clock);
 
 
 
-
-    data <= 3; load <= 0; sIn <= 0;	@(posedge Clock);
-
-
-
-    data <= 7; load <= 1; sIn <= 0;	@(posedge Clock);
+    data <= 8'b01111111; load <= 0; sIn <= 0;	@(posedge Clock);
+                                                @(posedge Clock);
+                                                @(posedge Clock);
 
 
+    data <= 8'b10101010; load <= 1; sIn <= 0;	@(posedge Clock);
+                                                @(posedge Clock);
+                                                @(posedge Clock);
 
-    data <= 6; load <= 0; sIn <= 1; @(posedge Clock);
 
+    data <= 8'b11010010; load <= 0; sIn <= 1;   @(posedge Clock);
+                                                @(posedge Clock);
+                                                @(posedge Clock);
 
-    data <= 6; load <= 1; sIn <= 1; @(posedge Clock);
+    data <= 8'b00010001; load <= 1; sIn <= 1;   @(posedge Clock);
+                         load <= 0; sIn <= 1;   @(posedge Clock);
 
     $finish;
    end

@@ -15,26 +15,32 @@ module BitSampleCounter(output dataOut,
                         output idEnable,
                         input dataIn,
                         input [3:0] enable,
-                        input clk);
+                        input clk,
+                        input rst);
 
-    reg [3:0] count;
+    reg [2:0] count;
     reg startFlag;
     reg id;
     reg data;
 
     always @(posedge clk) begin
-        if (enable == 4'b0000 && ~startFlag) begin
-            startFlag <= 1'b1;
-        end else if (startFlag && (count < 4'b1111)) begin
-            startFlag <= 1'b1;
-            count <= count + 1;
-            data <= dataIn;
+        if (!rst) begin
+            count <= 4'b000;
+            data <= 1'b0;
+            id <= 1'b0;
         end else begin
-            id <= 1'b1;
-            count <= 4'b0000;
-            startFlag <= 1'b0;
+            if (enable == 4'b0000 && ~startFlag) begin
+                startFlag <= 1'b1;
+            end else if (startFlag && (count < 4'b111)) begin
+                startFlag <= 1'b1;
+                count <= count + 1;
+                data <= dataIn;
+            end else begin
+                id <= 1'b1;
+                count <= 4'b000;
+                startFlag <= 1'b0;
+            end
         end
-
     end
 
     assign idEnable = id;
@@ -56,7 +62,8 @@ module BitSampleCounter_tb();
                          idEnable,
                          dataIn,
                          enable,
-                         clk);
+                         clk,
+                         rst);
 
     initial begin
     $dumpfile("BitSampleCounter_tb.vcd");
