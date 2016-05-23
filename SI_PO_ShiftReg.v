@@ -10,22 +10,22 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-module SI_PO_ShiftReg (clk, rst, SI, latch, PO); 
-	input  clk, rst, SI, latch; 
+module SI_PO_ShiftReg (clk, rst, SI, PO); 
+	input  clk, rst, SI; 
 	output [7:0] PO; 
-	reg [7:0] tmp; 
+	reg [9:0] tmp; 
  
 	always @(posedge clk) 
 	
 	begin
-		if (rst) begin
-			tmp = 8'bz;
+		if (!rst) begin
+			tmp = 10'bz;
 		end else begin
-			tmp = {tmp[6:0], SI}; // Shift in the 1-bit input value 
+			tmp = {tmp[8:0], SI}; // Shift in the 1-bit input value 
 		end
 	end 
 	
-	assign PO = latch ? tmp : 8'bz;
+	assign PO = tmp[8:1];
 	
 endmodule 
 
