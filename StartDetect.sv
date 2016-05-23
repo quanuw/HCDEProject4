@@ -11,17 +11,17 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-module StartDetect(output [3:0] enable,
+module StartDetect(output enable,
                    input sIn,
                    input clk,
                    input rst);
-    reg [3:0] temp;
+    reg temp;
 
     always @(posedge clk) begin
         if (!rst)
             temp <= 4'bZ;
         else
-            temp <= {temp[2:0], sIn};
+            temp <= sIn;
     end
 
     assign enable = temp;
