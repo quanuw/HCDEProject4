@@ -1,5 +1,5 @@
-module SI_PO_ShiftReg_tester (Clock, SI, rst, latch); 
-	output reg Clock, SI, rst, latch;
+module SI_PO_ShiftReg_tester (Clock, SI, rst); 
+	output reg Clock, SI, rst;
 	
 	// Set up the clock.
 	parameter CLOCK_PERIOD=2;
@@ -44,8 +44,6 @@ module SI_PO_ShiftReg_tester (Clock, SI, rst, latch);
 										@(posedge Clock);
 		SI <= 0;						@(posedge Clock);
 		SI <= 1;						@(posedge Clock);
-		latch <= 1;					@(posedge Clock);
-		latch <= 0;					@(posedge Clock);
 										@(posedge Clock);
 										@(posedge Clock);
 										@(posedge Clock);
