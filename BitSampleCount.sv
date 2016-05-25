@@ -14,31 +14,36 @@
 module BitSampleCounter(output dataOut,
                         output idEnable,
                         input dataIn,
-                        input [3:0] enable,
+                        input enable,
                         input clk,
                         input rst);
 
-    reg [2:0] count;
+    reg [3:0] count;
     reg startFlag;
     reg id;
-    reg data;
+    reg SRControl;
 
     always @(posedge clk) begin
         if (!rst) begin
-            count <= 3'b000;
+            count <= 4'b000;
             data <= 1'b0;
+            SRControl <= 1'b0;
             id <= 1'b0;
         end else begin
-            if (enable == 3'b000 && ~startFlag) begin
+            if (enable == 0 && ~startFlag) begin
                 startFlag <= 1'b1;
-            end else if (startFlag && (count < 3'b111)) begin
+            end else if (startFlag && (count < 4'b1111)) begin
                 startFlag <= 1'b1;
                 count <= count + 1;
-                data <= dataIn;
+                if (count == 4'b0111) begin
+                    SRControl <= 1'b1;
+                end
             end else begin
+                SRControl <= 1'b0;
                 id <= 1'b1;
-                count <= 3'b000;
+                count <= 4'b0000;
                 startFlag <= 1'b0;
+
             end
         end
     end
