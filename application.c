@@ -4,9 +4,6 @@
 // application.c
 #include "sys/alt_stdio.h"
 #include "altera_avalon_pio_regs.h"
-#define DATA_SIZE 16
-#define BUFFER_SIZE 4
-#define TIME_OUT 150000
  
 #define leds (volatile char *) 0x3050
 #define sendAddress (volatile char *) 0x3080
@@ -32,7 +29,6 @@ int main() {
 					alt_printf("Transmitted Character: %c\n", command);
 				}
 			}
-
 			write(command);
 			
 			// Read data
