@@ -17,25 +17,24 @@
 // aValue = IORD_ALTERA_AVALON_PIO_DATA(sourceAddress); : READ
 void write(char);
 int main() {
-		char command = ' ';
-		while (command != 32) { // escape - space
-		   alt_putstr("Enter an ASCII character: ");
-		   while (command >= 0 && command < 128) {
-				command = alt_getchar();
-				alt_getchar();
-				if(command < 0 || command >= 128) {
-					alt_putstr("\nThis is not a valid character. Please enter another character. \n");
-				} else {
-					alt_printf("Transmitted Character: %c\n", command);
-				}
+	char command = ' ';
+	while (command != 32) { // escape - space
+	   alt_putstr("Enter an ASCII character: ");
+	   while (command >= 0 && command < 128) {
+			command = alt_getchar();
+			alt_getchar();
+			if(command < 0 || command >= 128) {
+				alt_putstr("\nThis is not a valid character. Please enter another character. \n");
+			} else {
+				alt_printf("Transmitted Character: %c\n", command);
 			}
-			write(command);
-			
-			// Read data
-			values = IORD_ALTERA_AVALON_PIO_DATA(sendAddress);
-			*leds = values;
-			alt_printf("Received Character: %c\n", values);
 		}
+		write(command);
+		
+		// Read data
+		int values = IORD_ALTERA_AVALON_PIO_DATA(sendAddress);
+		*leds = values;
+		alt_printf("Received Character: %c\n", values);
 	}
 	return 0;
 }
