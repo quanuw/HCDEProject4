@@ -21,7 +21,7 @@
 void write(char);
 int main() {
 		char command = ' ';
-		while (command != 37) { // escape
+		while (command != 32) { // escape - space
 		   alt_putstr("Enter an ASCII character: ");
 		   while (command >= 0 && command < 128) {
 				command = alt_getchar();
@@ -34,6 +34,7 @@ int main() {
 			}
 
 			write(command);
+			
 			// Read data
 			*leds = *IORD_ALTERA_AVALON_PIO_DATA(sendAddress);
 			alt_printf("Received Character: %c\n", receiveAddress);
@@ -44,7 +45,7 @@ int main() {
 
 // Writes given character
 void write(char command) {
-	IOWR_ALTERA_AVALON_PIO_DATA(sendAddress, command + '0');
+	IOWR_ALTERA_AVALON_PIO_DATA(sendAddress, command);
 	IOWR_ALTERA_AVALON_PIO_DATA(load, 1);
 	IOWR_ALTERA_AVALON_PIO_DATA(transmitEnable, 1);
 	usleep(4);
