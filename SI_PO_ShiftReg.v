@@ -10,8 +10,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-module SI_PO_ShiftReg (clk, rst, SI, PO); 
-	input  clk, rst, SI; 
+module SI_PO_ShiftReg (clk, SRControl, rst, SI, PO); 
+	input  clk, rst, SI, SRControl; 
 	output [7:0] PO; 
 	reg [9:0] tmp; 
  
@@ -19,8 +19,8 @@ module SI_PO_ShiftReg (clk, rst, SI, PO);
 	
 	begin
 		if (!rst) begin
-			tmp = 10'bx;
-		end else begin
+			tmp = 10'bz;
+		end else if (SRControl) begin
 			tmp = {tmp[8:0], SI}; // Shift in the 1-bit input value 
 		end
 	end 
