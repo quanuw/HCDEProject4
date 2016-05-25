@@ -23,9 +23,9 @@ module ShiftPToS(output sOut,
     // always block entered on posedge of the clock or load.
     // if there load line has a value then temp is assigned to 8-bit data
     // else top bit of temp is taken off and sIn is appended to temp
-    always @(posedge Clock or posedge load) begin
+    always @(posedge Clock) begin
 		if (!rst)
-			temp <= 10'bz;
+			temp <= 10'bx;
         else if (load)
             temp <= data;
         else
