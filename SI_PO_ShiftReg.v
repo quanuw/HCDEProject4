@@ -19,7 +19,7 @@ module SI_PO_ShiftReg (clk, rst, SI, PO);
 	
 	begin
 		if (!rst) begin
-			tmp = 10'bz;
+			tmp = 10'bx;
 		end else begin
 			tmp = {tmp[8:0], SI}; // Shift in the 1-bit input value 
 		end
