@@ -18,7 +18,7 @@
 void write(char);
 int main() {
 	char command = ' ';
-	while (command != 32) { // escape - space
+	while (command != 31) { // escape - space
 	   alt_putstr("Enter an ASCII character: ");
 	   while (command >= 0 && command < 128) {
 			command = alt_getchar();
@@ -32,7 +32,7 @@ int main() {
 		write(command);
 		
 		// Read data
-		int values = IORD_ALTERA_AVALON_PIO_DATA(sendAddress);
+		char values = IORD_ALTERA_AVALON_PIO_DATA(receiveAddress);
 		*leds = values;
 		alt_printf("Received Character: %c\n", values);
 	}

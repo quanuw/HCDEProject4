@@ -8,13 +8,16 @@
 #define BUFFER_SIZE 4
 #define TIME_OUT 150000
  
-#define leds (volatile char *) 0x3020
-// #define sendAddress (volatile char *) 
-// #define receiveAddress (volatile char *) 
-// #define charReceived (volatile char *) 
+#define leds (volatile char *) 0x3050
+#define sendAddress (volatile char *) 0x3080
+#define receiveAddress (volatile char *) 0x3020
+#define charReceived (volatile char *) 0x3030
+#define charSent (volatile char *) 0x3040
+#define transmitEnable (volatile char *) 0x3060
+#define load (volatile char *) 0x3070
 
 // IOWR_ALTERA_AVALON_PIO_DATA(targetAddress, aValue); : WRITE
-// aValue = IOWR_ALTERA_AVALON_PIO_DATA(sourceAddress); : READ
+// aValue = IORD_ALTERA_AVALON_PIO_DATA(sourceAddress); : READ
 int main() {
 	char command = ' ';
 	while(1){
@@ -39,13 +42,13 @@ int main() {
 						alt_putstr("\nThis is not a valid character. Please enter another character. \n");
 					}
 				}
-				IOWR_ALTERA_AVALON_PIO_DATA(sendAddress, command2 + '0');
-				*leds = *IOWR_ALTERA_AVALON_PIO_DATA(sendAddress);
+				write(command2);
+				*leds = IORD_ALTERA_AVALON_PIO_DATA(receiveAddress);
 		   }
 		} else if (command == 'R') {
 			int count = 0;
 			char command3 = ' ';
-			while (go) {
+			while (1) {
 				if (count > TIME_OUT){
 					alt_putstr("Would you like to continue receiving?\n\nPossible Commands:\n1. \'Y\' - Yes\n2. \'N\' - No\n");
 					while (command3 != 'Y' && command3 != 'N') {
@@ -57,16 +60,27 @@ int main() {
 						}
 					}
 					if (command3 == 'N') {
-						continue;
+						break;
 					}
 					count = 0;
 				}
-				// if characterReceived {
-					// print character
-					// store character in register
-				//}
+				int charRec = IORD_ALTERA_AVALON_PIO_DATA(charReceived);
+				if (charRec) {
+					int data = IORD_ALTERA_AVALON_PIO_DATA(sendAddress);
+					alt_printf("Data Received: %c", data);
+				}
 			}
 		}
 	}
 	return 0;
+}
+
+// Writes given character
+void write(char command) {
+	IOWR_ALTERA_AVALON_PIO_DATA(sendAddress, command);
+	IOWR_ALTERA_AVALON_PIO_DATA(load, 1);
+	IOWR_ALTERA_AVALON_PIO_DATA(transmitEnable, 1);
+	usleep(4);
+	IOWR_ALTERA_AVALON_PIO_DATA(load, 0);
+	IOWR_ALTERA_AVALON_PIO_DATA(transmitEnable, 0);
 }
