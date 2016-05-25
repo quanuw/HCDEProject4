@@ -32,8 +32,9 @@ int main() {
 			write(command);
 			
 			// Read data
-			*leds = *IORD_ALTERA_AVALON_PIO_DATA(sendAddress);
-			alt_printf("Received Character: %c\n", receiveAddress);
+			values = IORD_ALTERA_AVALON_PIO_DATA(sendAddress);
+			*leds = values;
+			alt_printf("Received Character: %c\n", values);
 		}
 	}
 	return 0;
