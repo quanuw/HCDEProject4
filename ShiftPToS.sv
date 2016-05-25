@@ -15,6 +15,7 @@ module ShiftPToS(output sOut,
                  input [9:0] data,
                  input sIn,
                  input load,
+					  input SRControl
                  input Clock,
 				 input rst);
 
@@ -25,11 +26,11 @@ module ShiftPToS(output sOut,
     // else top bit of temp is taken off and sIn is appended to temp
     always @(posedge Clock) begin
 		if (!rst)
-			temp <= 10'bx;
-        else if (load)
-            temp <= data;
-        else
-            temp <= {temp[8:0], sIn};
+			temp <= 10'bz;
+		else if (load)
+			temp <= data;
+      else if (SRControl)
+         temp <= {temp[8:0], sIn};
     end
     // assign sOut temp
     assign sOut = temp[9];
