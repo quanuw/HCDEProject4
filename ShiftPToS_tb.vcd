@@ -1,5 +1,5 @@
 $date
-	Sun May 22 17:12:15 2016
+	Mon May 23 15:52:40 2016
 $end
 $version
 	Icarus Verilog
@@ -10,18 +10,18 @@ $end
 $scope module ShiftPToS_tb $end
 $var wire 1 ! sOut $end
 $var reg 1 " Clock $end
-$var reg 8 # data [7:0] $end
+$var reg 10 # data [9:0] $end
 $var reg 1 $ load $end
 $var reg 1 % rst $end
 $var reg 1 & sIn $end
 $scope module uut $end
 $var wire 1 " Clock $end
-$var wire 8 ' data [7:0] $end
+$var wire 10 ' data [9:0] $end
 $var wire 1 $ load $end
 $var wire 1 % rst $end
 $var wire 1 & sIn $end
 $var wire 1 ! sOut $end
-$var reg 8 ( temp [7:0] $end
+$var reg 10 ( temp [9:0] $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
@@ -47,11 +47,11 @@ bz (
 0"
 #4
 1!
-b10000101 (
+b1000010100 (
 1&
 1$
-b10000101 #
-b10000101 '
+b1000010100 #
+b1000010100 '
 1"
 #5
 0"
@@ -66,73 +66,66 @@ b10000101 '
 #10
 0&
 0$
-b1111111 #
-b1111111 '
 1"
 #11
 0"
 #12
 0!
-b1010 (
+b101000 (
 1"
 #13
 0"
 #14
-b10100 (
+b1010000 (
 1"
 #15
 0"
 #16
-1!
-b10101010 (
-1$
-b10101010 #
-b10101010 '
+b10100000 (
 1"
 #17
 0"
 #18
+b101000000 (
 1"
 #19
 0"
 #20
+1!
+b1010000000 (
 1"
 #21
 0"
 #22
+0!
+b100000000 (
 1&
-0$
-b11010010 #
-b11010010 '
 1"
 #23
 0"
 #24
-0!
-b1010101 (
+1!
+b1000000001 (
 1"
 #25
 0"
 #26
-1!
-b10101011 (
+0!
+b11 (
 1"
 #27
 0"
 #28
-0!
-b10001 (
-1$
-b10001 #
-b10001 '
+b111 (
 1"
 #29
 0"
 #30
-0$
+1!
+b1000010100 (
+1$
 1"
 #31
 0"
 #32
-b100011 (
 1"
